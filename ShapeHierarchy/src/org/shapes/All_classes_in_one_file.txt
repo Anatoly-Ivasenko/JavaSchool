@@ -1,0 +1,61 @@
+// В этом файле собраны все пять классов, чтоб удобней посмотреть
+
+//--Shape.java-----------------------------------------------------------
+
+package org.shapes;
+
+public abstract class Shape {
+}
+
+//--Circle.java----------------------------------------------------------
+
+package org.shapes;
+
+public class Circle extends Shape {
+    private double radius;
+
+    public Circle (double radius) {
+        this.radius = radius;
+    }
+}
+
+//--Triangle.java--------------------------------------------------------
+
+package org.shapes;
+
+public class Triangle extends Shape {
+    private double sideA;
+    private double sideB;
+    private double sideC;
+
+    public Triangle (double sideA, double sideB, double sideC) {
+        this.sideA = sideA;
+        this.sideB = sideB;
+        this.sideC = sideC;
+    }
+}
+
+//--Rectangle.java-------------------------------------------------------
+
+package org.shapes;
+
+public class Rectangle extends Shape {
+    private double width;
+    private double height;
+
+    public Rectangle(double width, double height) {
+        this.width = width;
+        this.height = height;
+    }
+}
+
+//--Square.java----------------------------------------------------------
+
+package org.shapes;
+
+public class Square extends Rectangle {
+
+    public Square(double side) {
+        super(side, side);
+    }
+}
