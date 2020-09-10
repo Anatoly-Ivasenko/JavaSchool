@@ -1,11 +1,12 @@
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 
-@SuppressWarnings("rawtypes")
 public class TextFileAnalyzer {
 
     public static class WordComparator implements Comparator<String> {
+        /* Компаратор, который применяется для сортировки слов (String) по длине, а затем лексикографически.
+        Используется для задания 2 */
+
         @Override
         public int compare(String obj1, String obj2) {
             if ((obj1.length() - obj2.length()) == 0) {
@@ -16,10 +17,12 @@ public class TextFileAnalyzer {
     }
 
     public static class LinesIterator implements Iterator<Object> {
-        private ArrayList list;
+        /* Итератор, для обхода списка в обратном порядке. Используется для задания 5 */
+
+        private List<String> list;
         private int counter;
 
-        public LinesIterator(ArrayList list) {
+        public LinesIterator(List<String> list) {
             this.list = list;
             counter = list.size();
         }
@@ -37,6 +40,9 @@ public class TextFileAnalyzer {
     }
 
     static ArrayList<String> FileToLines(String file) throws Exception {
+        /* Метод для чтения данных из файла
+           Формирует из текстового файла список строк
+           Необходим для всех заданий */
 
         ArrayList<String> lines = new ArrayList<>();
         FileReader inputFile = new FileReader(file);
@@ -53,20 +59,12 @@ public class TextFileAnalyzer {
         return lines;
     }
 
-//    static TreeSet<String> GetWords(ArrayList<String> lines) {
-//        TreeSet<String> words = new TreeSet<>(new WordComparator());
-//        for (String line : lines) {
-//            for (String nextWord : line.split("[ ,.\"]")) {
-//                words.add(nextWord.toLowerCase());
-//            }
-//        }
-//        for (String word : words) {
-//            System.out.println(word);
-//        }
-//        return words;
-//    }
-
     static TreeMap<String, Integer> GetWordsCount(ArrayList<String> lines) {
+        /* Метод, который из списка строк формирует TreeMap<Слово,Кол-во вхождений>,
+        отсортированный по длине слова, затем лексикографически.
+        Позволяет за один проход по тексту решить задания 1, 2 и 3.
+        Используется собственный компаратор WordComparator(см. выше) */
+
         TreeMap<String, Integer> wordsCounter = new TreeMap<>(new WordComparator());
         for (String line : lines) {
             for (String nextWord : line.split("([ ,.\"])")) {
@@ -106,21 +104,21 @@ public class TextFileAnalyzer {
         }
 
         System.out.println("--------Task 4a (for)------------");
-        System.out.println("Вывод текста в обратном порядке строк");
-        for (int i = lines.size() - 1; i >= 0; i--) {
+        System.out.println("Вывод текста в обратном порядке строк");     //Для вывода списка строк в обратном порядке
+        for (int i = lines.size() - 1; i >= 0; i--) {                    //используется цикл for. Задание 4
             System.out.println(lines.get(i));
         }
 
-        System.out.println("--------Task 4b (listIterator)-----------");
-        System.out.println("Вывод текста в обратном порядке строк");
-        ListIterator linesIterator = lines.listIterator(lines.size());
+        System.out.println("--------Task 4b (ListIterator)-----------");
+        System.out.println("Вывод текста в обратном порядке строк");             //Для вывода списка строк в обратном порядке
+        ListIterator<String> linesIterator = lines.listIterator(lines.size());   //используется ListIterator. Задание 4
         while(linesIterator.hasPrevious()) {
             System.out.println(linesIterator.previous());
         }
         System.out.println("--------Task 5 (My Iterator)-----------");
-        System.out.println("Вывод текста в обратном порядке строк");
-        LinesIterator myLinesIterator = new LinesIterator(lines);
-        while (myLinesIterator.hasNext()) {
+        System.out.println("Вывод текста в обратном порядке строк");             //Для вывода списка строк в обратном порядке
+        LinesIterator myLinesIterator = new LinesIterator(lines);                //используется свой итератор (см. выше)
+        while (myLinesIterator.hasNext()) {                                      //Задание 5
             System.out.println(myLinesIterator.next());
         }
         System.out.println("-----------Task 6--------------");
@@ -135,8 +133,8 @@ public class TextFileAnalyzer {
                     break;
                 }
                 if (inputLine >= 0 && inputLine < (lines.size())) {
-                    System.out.println(lines.get(inputLine));
-                }
+                    System.out.println(lines.get(inputLine));                    //Вывод строки по номеру индекса
+                }                                                                //Задание 6
                 else System.out.println("___Нет_такой_строки___");
             }
             catch (InputMismatchException e) {

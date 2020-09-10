@@ -47,6 +47,12 @@ public class CarTypezator {
 
         System.out.println("------------------------------------------------");
         HashMap<String, ArrayList<String>> carTypes = new HashMap<>();
+        /*
+        Для решения задачи используется структура HashMap<ТипАвто, Список МоделейАвто>
+        При итерации по исходному списку машин проверяем есть ли ТипАвто текущей машины
+        в HashMap, если нет, то добавляем запись с ключом ТипАвто и пустым Списком МоделейАвто;
+        далее в Список МоделейАвто, соответствующей текущему ТипуАвто добавляем текущую МодельАвто
+         */
         for (Car car: carList) {
             if (!carTypes.containsKey(car.getType())) {
                 carTypes.put(car.getType(), new ArrayList<>());
