@@ -1,7 +1,5 @@
 package org.jschool.generics;
 
-import java.util.AbstractMap;
-import java.util.List;
 import java.util.Map;
 
  public interface CountMap<T> {
@@ -9,14 +7,13 @@ import java.util.Map;
 
     int getCount(T element);
 
-    //current count
     int remove(T element);
 
     int size();
 
-    void addAll(CountMap<T> source);
+    void addAll(CountMap<? extends T> source);
 
-    Map toMap();
+    Map<? super T, Integer> toMap();
 
-    void toMap(Map destination);
+    void toMap(Map<? super T, Integer> destination);
 }
