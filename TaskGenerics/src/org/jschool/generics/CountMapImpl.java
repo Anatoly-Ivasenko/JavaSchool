@@ -16,7 +16,7 @@ public class CountMapImpl<T> implements CountMap<T>  {
     private Map<T, Integer> countMap;
 
     /**
-     * Конструктор объекта. Инициализирует хранилище и присваивает ему пустую HashMap.
+     * Конструктор объекта. Инициализирует контейнер CountMap и присваивает ему пустую HashMap.
      */
     public CountMapImpl() {
         this.countMap = new HashMap<>();
@@ -30,24 +30,30 @@ public class CountMapImpl<T> implements CountMap<T>  {
      * если есть в хранилище значение, соответствующеее указанному объекту, увеличивается на 1.
      * @param element добавляемый в контейнер объект
      */
+    @Override
     public void add(T element) {
         countMap.compute(element, (elem, counter) -> (counter == null) ? 1 : counter + 1);
     }
 
     /**
+     * Возвращает количество хранимых в контейнере экземпляров указанного объекта типа T.
      * Возвращает из хранилища значение, соответствующее ключу - указанному объекту.
      * @param element целевой объект
-     * @return
+     * @return  количество хранимых в контейнере экземпляров указанного объекта
      */
+    @Override
     public int getCount(T element) {
         return countMap.get(element);
     }
 
     /**
+     * Удаляет из контейнера один экземпляр указанного объекта типа T и возвращает
+     * количество хранимых в контейнере экземпляров указанного объекта до удаления.
      * Возвращает из хранилища значение, соответствующее ключу - указанному объекту и уменьшает его на 1.
      * @param element целевой объект
-     * @return
+     * @return  количество хранимых в контейнере экземпляров указанного объекта до удаления
      */
+    @Override
     public int remove(T element) {
         Integer counter = countMap.getOrDefault(element, 0);
         countMap.put(element, counter - 1);
@@ -55,9 +61,11 @@ public class CountMapImpl<T> implements CountMap<T>  {
     }
 
     /**
+     * Возвращает количество различных объектов типа T, хранимых в контейнере.
      * Возвращает размер хранилища - количество различных объектов в контейнере.
-     * @return размер хранилища - количество различных объектов в контейнере
+     * @return количество различных объектов, хранимых в контейнере
      */
+    @Override
     public int size() {
         return countMap.size();
     }
@@ -71,17 +79,18 @@ public class CountMapImpl<T> implements CountMap<T>  {
      * Указанный контейнер должен содержать объекты типа T или любого наследуемого от T типа.
      * @param source  Контейнер объектов типа T или любого наследуемого от T типа
      */
+    @Override
     public void addAll(CountMap<? extends T> source) {
-        Map<? extends T,Integer> addMap = (Map<? extends T, Integer>) source.toMap();
-        addMap.forEach((addElement, addCounter) -> countMap.merge(addElement, addCounter, Integer::sum));
+        source.toMap().forEach((addElement, addCounter) -> countMap.merge((T)addElement, addCounter, Integer::sum));
     }
 
     /**
      * Возвращает java.util.Map, содержащий ключами различные объекты типа T, хранимые в контейнере,
      * а значениями - количеством экземпляров этих объектов, хранимых в контейнере.
      * Поскольку внутри реализации хранилище является java.util.Map, возвращаем хранилище.
-     * @return  java.util.Map, с ключамим - объектами и их количеством в качестве значений
+     * @return  java.util.Map, с ключами - объектами и их количеством в качестве значений
      */
+    @Override
     public Map<T, Integer> toMap() {
         return countMap;
     }
@@ -89,8 +98,9 @@ public class CountMapImpl<T> implements CountMap<T>  {
      * Очищает указанный объект destination и заполняет его ключами - различными объектами, хранимыми в контейнере
      * и значениями - количеством экземпляров этих объектов, хранимых в контейнере.
      * Указанный объект должен быть java.util.Map (или его наследником) с ключами типа T или его "предками"
-     * @param destination   указанный объект, в который записывает информация о хранимых в контейнере объектах
+     * @param destination   указанный объект, в который записывается информация о хранимых в контейнере объектах
      */
+    @Override
     public void toMap(Map<? super T, Integer> destination) {
         destination.clear();
         countMap.forEach(destination::put);
