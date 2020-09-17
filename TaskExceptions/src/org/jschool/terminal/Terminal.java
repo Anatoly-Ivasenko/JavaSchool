@@ -2,9 +2,9 @@ package org.jschool.terminal;
 
 public interface Terminal {
 
-    void checkAccount();
+    String checkAccount();
 
-    void cash();
+    String cash(String input);
 
-    void deposit();
+    String deposit(String input);
 }
