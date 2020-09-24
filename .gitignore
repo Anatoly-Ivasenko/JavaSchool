@@ -5,4 +5,5 @@ out/
 HelloProject/
 .DS_Store
 Others/
+target/
 
