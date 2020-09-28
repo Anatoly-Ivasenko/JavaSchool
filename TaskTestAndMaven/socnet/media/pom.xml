@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.jschool.socnet</groupId>
-    <artifactId>imaging</artifactId>
+    <artifactId>media</artifactId>
 
     <dependencies>
         <dependency>

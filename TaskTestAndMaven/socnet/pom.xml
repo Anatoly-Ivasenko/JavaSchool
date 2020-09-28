@@ -12,7 +12,7 @@
         <module>core</module>
         <module>webapp</module>
         <module>communications</module>
-        <module>imaging</module>
+        <module>media</module>
     </modules>
 
 

@@ -1,18 +1,21 @@
 package org.jschool.socnet.communications;
 
+import javax.print.attribute.standard.Media;
 import java.util.List;
 
+/**
+ * Интрефейс сообщения, предназначен для обработки информации об отправляемых сообщениях
+ *
+ * Объект предположительно должен содержать текст сообщения, информацию об авторе,
+ * ссылки на медиа включенные в сообщение.
+ *
+ */
 public interface Message {
 
-    Message getMessage(int messageId);
+    void replaceMessage(Message newMessage);
 
-    void replaceMessage(int messageId, Message message);
+    String getTextOfMessage();
 
-    String getTextOfMessage(Message message);
+    List<Media> getReferencesMedia();
 
-    String getTextOfMessage(int messageId);
-
-    List<Integer> getReferenceMedia(Message message);
-
-    List<Integer> getReferenceMedia(int messageId);
 }
