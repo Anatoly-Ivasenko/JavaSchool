@@ -79,7 +79,7 @@ public class EncryptedClassloader extends ClassLoader {
         byte[] decrypt = new byte[encrypt.length];
         int keyCounter = 0;
         for (int i = 0;  i < encrypt.length; i++) {
-            decrypt[i] = (byte) (encrypt[i] - cryptKey[keyCounter]);
+            decrypt[i] = (byte) (encrypt[i] + cryptKey[keyCounter]);
             keyCounter++;
             if (keyCounter >= cryptKey.length) {
                 keyCounter = 0;
