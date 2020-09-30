@@ -17,11 +17,11 @@ public class CachingInvocationHandler implements InvocationHandler {
         if (!method.isAnnotationPresent(Cache.class)) {
             return method.invoke(cachedObject,args);
         }
-        if (cacheProxy.containsCache(method, args)) {
-            return cacheProxy.getFromCache(method, args);
+        if (cacheProxy.containsCache(method, args, cachedObject.getClass())) {
+            return cacheProxy.getFromCache(method, args, cachedObject.getClass());
         }
         Object object = method.invoke(cachedObject,args);
-        cacheProxy.putCache(method, args, object);
+        cacheProxy.putCache(method, args, object, cachedObject.getClass());
         return object;
     }
 }
