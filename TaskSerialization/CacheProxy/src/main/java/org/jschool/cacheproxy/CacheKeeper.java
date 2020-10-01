@@ -31,7 +31,7 @@ public class CacheKeeper implements InvocationHandler {
 
             if (!cacheFile.exists()) {
                 Object result = method.invoke(cachedObject, args);
-                CacheUtils.save(result, cacheSettings, cacheFile);
+                CacheUtils.save(CacheUtils.trimResult(result, cacheSettings), cacheSettings, cacheFile);
                 return result;
             }
             return CacheUtils.getCache(cacheFile);
