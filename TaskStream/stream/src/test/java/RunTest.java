@@ -33,6 +33,11 @@ public class RunTest {
                 .distinct();
         integerStream.forEach(System.out::println);
 
+        MyStream<String> stringStream = MyStream.of("1,2,2,3,4,5,6,7,8,8,9","Gthsd","dsjfkh sdkjhfl")
+                .map(i -> i.toLowerCase())
+                .map(i -> i.replaceAll("[, ]",""));
+        stringStream.forEach(System.out::println);
+
 
     }
 }
