@@ -1,11 +1,11 @@
 import org.jschool.stream.Gammacrypto;
 import org.jschool.stream.MyLambda;
+import org.jschool.stream.MyStream;
 import org.jschool.stream.Tribonacci;
 
 public class RunTest {
 
     public static void main(String[] args) {
-        final int CYR = 1071;
 
         //Тест MyLambda
         MyLambda<String> myLambda1 = (a, b) -> a + b;
@@ -15,7 +15,7 @@ public class RunTest {
 
         //Тест Tribonacci
         System.out.println("---Tribonacci---");
-        Tribonacci.tribonacci(50).forEach(System.out::println);
+        Tribonacci.tribonacci(7).forEach(System.out::println);
 
         //Тест Gammacrypto
         System.out.println("---Gammacrypto---");
@@ -24,6 +24,15 @@ public class RunTest {
         String cryptoMessage = Gammacrypto.encrypt(message, key);
         System.out.println(cryptoMessage);
         System.out.println(Gammacrypto.decrypt(cryptoMessage, key));
+
+        //Тест MyStream
+        System.out.println("---MyStream---");
+        MyStream<Integer> integerStream = MyStream.of(1,2,2,3,4,5,6,7,8,8,9)
+                .filter(i -> i%2 == 0)
+                .map(i -> i*i)
+                .distinct();
+        integerStream.forEach(System.out::println);
+
 
     }
 }
