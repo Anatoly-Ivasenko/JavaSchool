@@ -1,6 +1,6 @@
 package org.jschool.socnet.communications;
 
-import javax.print.attribute.standard.Media;
+import org.jschool.socnet.media.Media;
 import java.util.List;
 
 /**
