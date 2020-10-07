@@ -12,10 +12,14 @@ import java.util.List;
  */
 public interface Message {
 
-    void replaceMessage(Message newMessage);
+    void replaceMessage(String newTextMessage);
 
-    String getTextOfMessage();
+    void replaceMessage(List<Media> newMedias);
 
-    List<Media> getReferencesMedia();
+    void replaceMessage(String newTextMessage, List<Media> newMedias);
+
+    String getText();
+
+    List<Media> getMedias();
 
 }

@@ -26,8 +26,10 @@ public interface User {
     void joinToChat(Chat chat);
 
     Message createMessage(String textMessage, Chat destinationChat);
+    // return new MessageImpl (textMessage, destinationChat, this);
 
-    Message createMessage(String textMessage, Media media, Chat destinationChat);
+    Message createMessage(String textMessage, List<Media> medias, Chat destinationChat);
+    // return new MessageImpl (textMessage, medias, destinationChat, this);
 
     void uploadMedia(File mediaFile);
 

@@ -10,9 +10,6 @@ import java.util.List;
  */
 
 public interface Chat {
-    public static final int PRIVATE = 1;        //Личная переписка tet-a-tet
-    public static final int WALL = 2;           //Переписка на стене
-    public static final int CONVERSATION = 3;   //Групповой чат
 
     void putMessage(Message message);
 
