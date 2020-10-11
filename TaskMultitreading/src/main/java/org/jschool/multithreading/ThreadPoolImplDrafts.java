@@ -1,25 +1,46 @@
 package org.jschool.multithreading;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
-public class ThreadPoolImpl implements ThreadPool{
+public class ThreadPoolImplDrafts implements ThreadPool{
     private final int numberOfThreads;
     private final Object taskListLock = new Object();
-    private final List<Runnable> taskList = Collections.synchronizedList(new ArrayList<>());
-    private final Map<Thread, Thread.State> threadMap = Collections.synchronizedMap(new HashMap<>());
+    private final LinkedList<Runnable> taskList = new LinkedList<>();
+    private final List<Thread> threadList = Collections.synchronizedList(new ArrayList<>());
 
 
-    public ThreadPoolImpl() {
+    public ThreadPoolImplDrafts() {
         this(10);
     }
 
-    public ThreadPoolImpl(int numberOfThreads) {
+    public ThreadPoolImplDrafts(int numberOfThreads) {
         this.numberOfThreads = numberOfThreads;
     }
 
     @Override
     public void start() {
-//        ThreadGroup pool = new ThreadGroup("pool");
+
+        Thread daemonThread = new Thread(() -> {
+            while (true) {
+                synchronized (this) {
+                    if (taskList.size() == 0) {
+                        try {
+                            wait(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        notify();
+                    }
+                }
+            }
+        });
+        daemonThread.setDaemon(true);
+        daemonThread.start();
+
         for (int i = 0; i < numberOfThreads; i++) {
             Thread thread = new Thread(() -> {
                 Thread currentThread = Thread.currentThread();
@@ -31,65 +52,40 @@ public class ThreadPoolImpl implements ThreadPool{
                             System.out.println(id + " going to wait");
                             wait();
                             System.out.println(id + " waked up");
-                            Runnable tempTask = taskList.remove(0);
-                            new Thread(tempTask);
-                            System.out.println(id + " task complete");
+                            if (taskList.peek() != null) {
+                                Runnable tempTask = taskList.poll();
+                                Thread utilTask = new Thread(tempTask);
+                                utilTask.start();
+                                System.out.println(id + " task complete");
+                            }
                         } catch (InterruptedException e) {
                             System.out.println(id + " interrupted");
-
                         }
                     }
                 }
                 System.out.println(id + " finished");
             });
             thread.start();
-            threadMap.put(thread, thread.getState());
+            threadList.add(thread);
         }
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//        System.out.print(pool.getName() + ": " + pool.activeCount() + "---");
+
         System.out.println(Thread.currentThread().getThreadGroup().getName() + ": " + Thread.currentThread().getThreadGroup().activeCount());
 
-        threadMap.forEach((thread, state) ->
+        threadList.forEach((thread) ->
                 System.out.println(thread.getThreadGroup().getName() + "/"
-                        + thread.getName() + ": " + thread.getState() + " " + state));
-//        synchronized (this) {
-//            threadMap.forEach((thread, state) -> notify());
-//        }
-
-
-
-//        while (true) {
-//            try {
-//                synchronized (this) {
-//                    wait(500);
-//                }
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            synchronized (this) {
-//                threadMap.forEach((thread, state) -> {
-//                    if (taskList.size() > 0) {
-//                        notify();
-//                    }
-//                });
-//            }
-//        }
+                        + thread.getName() + ": " + thread.getState()));
     }
-
-
-
-
-
-
 
     @Override
     public void execute(Runnable task) {
         synchronized (this) {
             taskList.add(task);
+            System.out.print("|");
         }
     }
 }
