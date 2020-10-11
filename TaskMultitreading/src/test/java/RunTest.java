@@ -7,7 +7,8 @@ import java.util.List;
 public class RunTest {
 
     public static void main(String[] args) {
-        ThreadPool threadPool = new FixedThreadPool(3);
+//        ThreadPool threadPool = new FixedThreadPool(3);
+        ThreadPool threadPool = new ScalableThreadPool(2, 15);
         threadPool.start();
 
 
@@ -16,16 +17,21 @@ public class RunTest {
             Runnable task = () -> {
                 List<Long> triboResult = Tribonacci.tribonacci(finalI);
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.out.println("I'm busy");
                 }
                 System.out.println("Tribo(" + finalI + ")=" + triboResult.get(triboResult.size()-1));
             };
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             threadPool.execute(task);
         }
         try {
-            Thread.sleep(100);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -34,12 +40,17 @@ public class RunTest {
             Runnable task = () -> {
                 List<Long> triboResult = Tribonacci.tribonacci(finalI);
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.out.println("I'm busy");
                 }
                 System.out.println("Tribo(" + finalI + ")=" + triboResult.get(triboResult.size()-1));
             };
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             threadPool.execute(task);
         }
     }

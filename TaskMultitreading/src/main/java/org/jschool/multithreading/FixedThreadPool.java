@@ -62,52 +62,12 @@ public class FixedThreadPool implements ThreadPool {
             }
             Runnable tempTask;
             synchronized (taskList) {
-                tempTask = FixedThreadPool.this.taskList.poll();
+                tempTask = taskList.poll();
             }
-            tempTask.run();
+            if (tempTask != null) {
+                tempTask.run();
+            }
         }
     }
-
-//    class DaemonTask implements Runnable {
-//
-//        @Override
-//        public void run() {
-//            while (true) {
-//                synchronized (FixedThreadPool.this.taskList) {
-//                    System.out.println(FixedThreadPool.this.taskList.size());
-//                    if (FixedThreadPool.this.taskList.size() == 0) {
-//                        try {
-//                            wait(200);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                    } else {
-//                        notify();
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    class ProviderTask implements Runnable {
-//
-//        @Override
-//        public void run() {
-//            while (!Thread.currentThread().isInterrupted()) {
-//                synchronized (this) {
-//                    System.out.println(Thread.currentThread().getName());
-//                    try {
-//                        wait();
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                synchronized (taskList) {
-//                    Runnable tempTask = FixedThreadPool.this.taskList.poll();
-//                    new Thread(tempTask).start();
-//                }
-//            }
-//        }
-//    }
 }
 

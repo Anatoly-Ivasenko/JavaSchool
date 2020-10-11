@@ -1,9 +1,6 @@
 package org.jschool.multithreading;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 
 public class ScalableThreadPool implements ThreadPool {
@@ -26,12 +23,12 @@ public class ScalableThreadPool implements ThreadPool {
     @Override
     public void start() {
 
-        Thread daemonThread = new Thread(new DaemonTask());
+        Thread daemonThread = new Thread(this::daemonTask);
         daemonThread.setDaemon(true);
         daemonThread.start();
 
         for (int i = 0; i < minNumberOfThreads; i++) {
-            Thread thread = new Thread(new ProviderTask());
+            Thread thread = new Thread(this::providerTask);
             thread.start();
             synchronized (threadSet) {
                 threadSet.add(thread);
@@ -41,96 +38,77 @@ public class ScalableThreadPool implements ThreadPool {
 
     @Override
     public void execute(Runnable task) {
+
         synchronized (taskList) {
             taskList.add(task);
         }
-        synchronized (threadSet) {
+
+        synchronized (this) {
             if (threadSet.size() < maxNumberOfThreads) {
                 boolean allRun = true;
                 for (Thread thread : threadSet) {
-                    if (thread.getState() != Thread.State.RUNNABLE) {
+                    if (thread.getState() == Thread.State.WAITING) {
                         allRun = false;
                         break;
                     }
                 }
                 if (allRun) {
-                    Thread thread = new Thread(new ProviderTask());
+                    Thread thread = new Thread(this::providerTask);
                     thread.start();
                     synchronized (threadSet) {
                         threadSet.add(thread);
                     }
                 }
-
             }
         }
     }
-    class DaemonTask implements Runnable {
 
-        @Override
-        public void run() {
-            while (true) {
-                synchronized (ScalableThreadPool.this.locker) {
-                    if (ScalableThreadPool.this.taskList.size() == 0) {
-                        try {
-                            wait(200);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+    private void daemonTask() {
+        while (true) {
+            synchronized (this) {
+                if (taskList.size() == 0) {
+                    if (threadSet.size() > minNumberOfThreads) {
+                        Iterator<Thread> threadIterator = threadSet.iterator();
+                        for (int i = 0; i < threadSet.size() - minNumberOfThreads; i++) {
+                            Thread thread = threadIterator.next();
+                            if (thread.getState() == Thread.State.WAITING) {
+                                thread.interrupt();
+                            }
                         }
-                    } else {
-                        notify();
                     }
-                }
-            }
-        }
-    }
-
-    class ProviderTask implements Runnable {
-
-        @Override
-        public void run() {
-            while (!Thread.currentThread().isInterrupted()) {
-                synchronized (ScalableThreadPool.this.locker) {
                     try {
-                        wait();
+                        wait(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }
-                synchronized (ScalableThreadPool.this.taskList) {
-                    Runnable tempTask = ScalableThreadPool.this.taskList.poll();
-                    new Thread(tempTask).start();
+                } else {
+                    notify();
                 }
             }
         }
     }
+
+    private void providerTask() {
+        System.out.println(Thread.currentThread().getName() + " started");
+        while (!Thread.currentThread().isInterrupted()) {
+            synchronized (this) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            Runnable tempTask;
+            synchronized (taskList) {
+                tempTask = taskList.poll();
+            }
+            if (tempTask != null) {
+                tempTask.run();
+            }
+        }
+        synchronized (threadSet){
+            threadSet.remove(Thread.currentThread());
+        }
+        System.out.println(Thread.currentThread().getName() + " finished");
+    }
 }
-
-
-
-
-//    class providerTask() implements Runnable {
-//
-//        @Override
-//        public void run(){
-//        Thread thread = new Thread(() -> {
-//            Thread currentThread = Thread.currentThread();
-//            while (!currentThread.isInterrupted()) {
-//                synchronized (this) {
-//                    try {
-//                        wait();
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                synchronized (ScalableThreadPool.this.taskList) {
-//                    Runnable tempTask = ScalableThreadPool.this.taskList.poll();
-//                    new Thread(tempTask).start();
-//                }
-//            }
-//        }
-//        }
-//    }
-
-//
-//
-//}
