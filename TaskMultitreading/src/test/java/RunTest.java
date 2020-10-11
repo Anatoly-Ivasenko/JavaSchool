@@ -7,7 +7,7 @@ import java.util.List;
 public class RunTest {
 
     public static void main(String[] args) {
-        ThreadPool threadPool = new FixedThreadPool(10);
+        ThreadPool threadPool = new FixedThreadPool(3);
         threadPool.start();
 
 
@@ -15,11 +15,11 @@ public class RunTest {
             int finalI = i;
             Runnable task = () -> {
                 List<Long> triboResult = Tribonacci.tribonacci(finalI);
-//                try {
-//                    Thread.sleep(500);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 System.out.println("Tribo(" + finalI + ")=" + triboResult.get(triboResult.size()-1));
             };
             threadPool.execute(task);
