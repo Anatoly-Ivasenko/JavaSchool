@@ -3,6 +3,7 @@ import org.jschool.memorymodel.Task;
 import java.util.List;
 
 public class RunTest {
+
     public static void main(String[] args) {
         Task<List<Long>> task = new Task<>(() -> Tribonacci.tribonacci(3));
         for (int i = 0; i < 10; i++) {

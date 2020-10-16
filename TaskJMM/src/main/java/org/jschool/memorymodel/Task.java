@@ -56,8 +56,7 @@ public class Task<T> {
      * если не вызывался - вызывает callable.call() и  сохраняет результат или исключение, затем устанваливает
      * флаг isCalled в true.
      */
-    private void calling() {
-        synchronized (this){
+    private synchronized void calling() {
 //            System.out.println(Thread.currentThread().getName() + " entered");
             if (isCalled) {
                 return;
@@ -70,7 +69,6 @@ public class Task<T> {
             } finally {
                 isCalled = true;
             }
-        }
     }
 }
 
