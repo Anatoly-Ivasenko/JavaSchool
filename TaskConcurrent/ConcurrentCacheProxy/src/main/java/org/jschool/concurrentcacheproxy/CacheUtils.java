@@ -22,9 +22,11 @@ public class CacheUtils {
      * @throws Exception Бросает ряд исключений, связанных с некорректной работой с ФС и сериализацией
      */
     public static void save(Object result, CacheSettings cacheSettings, File cacheFile) throws Exception {
-        synchronized (cacheFile) {
+        {
             try {
                 if (!cacheFile.createNewFile()) throw new FileAlreadyExistsException("Файл уже существует");
+            } catch (FileAlreadyExistsException e) {
+                throw e;
             } catch (IOException e) {
                 throw new IOException("Нет доступа к файлу");
             }
@@ -50,9 +52,11 @@ public class CacheUtils {
      * @throws Exception Бросает ряд исключений, связанных с некорректной работой с ФС и сериализацией
      */
     public static void saveToZip(Object result, CacheSettings cacheSettings, File cacheFile) throws Exception {
-        synchronized (cacheFile) {
+        {
             try {
                 if (!cacheFile.createNewFile()) throw new FileAlreadyExistsException("Файл уже существует");
+            } catch (FileAlreadyExistsException e) {
+                throw e;
             } catch (IOException e) {
                 throw new IOException("Нет доступа к файлу");
             }

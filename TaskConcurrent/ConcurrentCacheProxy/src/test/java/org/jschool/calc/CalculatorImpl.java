@@ -1,15 +1,17 @@
 package org.jschool.calc;
 
 import org.jschool.concurrentcacheproxy.Cache;
-import org.jschool.concurrentcacheproxy.CacheType;
 
 public class CalculatorImpl implements Calculator {
 
     @Override
     @Cache                              // Тесты CacheSettingsTest без этой аннотации не проходят, однако RunTest работает
     public int calc(int number) {
-        long factorial = 0L;
-        long internalNumber = (long) number;
+        if (number < 1) {
+            throw new RuntimeException("Число должно быть больше еденицы");
+        }
+        long factorial;
+        long internalNumber = number;
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {

@@ -17,7 +17,6 @@ public class CacheUtilsTest {
     public static void setUp() throws Exception {
         Calculator newCalc = new CalculatorImpl();
         cacheSettingsDefault = new CacheSettings(newCalc.getClass().getMethod("calc", int.class));
-        System.out.println(cacheSettingsDefault.cached());
     }
 
     @Test
@@ -27,6 +26,7 @@ public class CacheUtilsTest {
         CacheUtils.save(actual, cacheSettingsDefault, testFile);
         Object expected = CacheUtils.getCache(testFile);
         assertEquals(expected, actual);
+        testFile.delete();
     }
 
     @Test
@@ -36,5 +36,6 @@ public class CacheUtilsTest {
         CacheUtils.saveToZip(actual, cacheSettingsDefault, testFile);
         Object expected = CacheUtils.getCacheFromZip(testFile);
         assertEquals(expected, actual);
+        testFile.delete();
     }
 }

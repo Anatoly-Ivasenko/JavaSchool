@@ -31,27 +31,6 @@ public class CacheSettings {
     }
 
     /**
-     * Возвращает префикс для ключа/имени файла кэша
-     * @return String   префикс для ключа/имени файла кэша
-     */
-    String keyPrefix() {
-        if (method.getAnnotation(Cache.class).namePrefix().equals("")) {
-            return method.getName();
-        }
-        else {
-            return method.getAnnotation(Cache.class).namePrefix();
-        }
-    }
-
-    /**
-     * Возвращает массив классов параметров кэшируемого объекта
-     * @return  Class[] классы параметров кэшируемого объекта
-     */
-    Class<?>[] getMethodParameterTypes() {
-        return method.getParameterTypes();
-    }
-
-    /**
      * Возвращает true если результат метода имплементирует интерфейс List
      * @return  boolean true если результат метода имплементирует интерфейс List
      */
@@ -74,15 +53,6 @@ public class CacheSettings {
     }
 
     /**
-     * Возвращает массив классов параметров, которые необходимо учитывать
-     * при создании ключа/имени файла
-     * @return  Class[]
-     */
-    Class<?>[] argsForKey() {
-        return (method.getAnnotation(Cache.class).identityBy());
-    }
-
-    /**
      * Возвращает емкость списка для хранения в кэше (для List'ов)
      * @return int  емкость списка List для хранения
      */
@@ -96,5 +66,60 @@ public class CacheSettings {
      */
     String getMethodName() {
         return method.getName();
+    }
+
+    /**
+     * Возвращает ключ/имя файла кэшируемого результата.
+     * @param args          Object[]        массив аргументов
+     * @return String   ключ/имя файла кэшируемого результата
+     */
+    String keyGenerator(Object[] args) {
+        StringBuilder keyBuilder = new StringBuilder();
+        keyBuilder.append(keyPrefix());
+        Class<?>[] parameterTypes = method.getParameterTypes();
+
+        if (argsForKey().length == 0) {
+            for (int i = 0; i < parameterTypes.length; i++) {
+                keyBuilder.append("_").append(parameterTypes[i].getName()).append(args[i].hashCode());
+            }
+            return keyBuilder.toString();
+        }
+
+        int[] keyArgs = new int[argsForKey().length];
+        int argsForKeyCounter = 0;
+        for (int i = 0; i < parameterTypes.length; i++) {
+            if (parameterTypes[i].equals(argsForKey()[argsForKeyCounter])) {
+                keyArgs[argsForKeyCounter] = i;
+                argsForKeyCounter++;
+            }
+        }
+
+        for (int keyArg : keyArgs) {
+            keyBuilder.append("_").append(parameterTypes[keyArg].getName()).append(args[keyArg].hashCode());
+        }
+
+        return keyBuilder.toString();
+    }
+
+    /**
+     * Возвращает префикс для ключа/имени файла кэша
+     * @return String   префикс для ключа/имени файла кэша
+     */
+    String keyPrefix() {
+        if (method.getAnnotation(Cache.class).namePrefix().equals("")) {
+            return method.getName();
+        }
+        else {
+            return method.getAnnotation(Cache.class).namePrefix();
+        }
+    }
+
+    /**
+     * Возвращает массив классов параметров, которые необходимо учитывать
+     * при создании ключа/имени файла
+     * @return  Class[]
+     */
+    Class<?>[] argsForKey() {
+        return (method.getAnnotation(Cache.class).identityBy());
     }
 }

@@ -14,7 +14,6 @@ public class CacheSettingsTest {
     public static void setUp() throws Exception {
         Calculator newCalc = new CalculatorImpl();
         cacheSettingsDefault = new CacheSettings(newCalc.getClass().getMethod("calc", int.class));
-        System.out.println(cacheSettingsDefault.cached());
     }
 
     @Test
@@ -34,13 +33,6 @@ public class CacheSettingsTest {
         assertEquals(expected, actual);
     }
 
-    @Test
-    public void getMethodParameterTypes() {
-        Class<?>[] actual = new Class<?>[1];
-        actual[0] = int.class;
-        Class<?>[] expected = cacheSettingsDefault.getMethodParameterTypes();
-        assertArrayEquals(expected, actual);
-    }
 
     @Test
     public void resultIsAssignableToList() {
