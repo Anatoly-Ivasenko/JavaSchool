@@ -29,7 +29,7 @@ public class ListCacheDaoImpl implements ListCacheDao {
 
     @Override
     public void addToCache(List<Integer> list) {
-        List<Integer> valuesForAdding = list.subList(getLastArgInCache(), list.size() - 1);
+        List<Integer> valuesForAdding = list.subList(getLastArgInCache(), list.size());
         try (PreparedStatement statement = source.connection().prepareStatement(INSERT_VALUE_IN_CACHE_TABLE)) {
             for (Integer value : valuesForAdding) {
                 statement.setInt(1, value);
