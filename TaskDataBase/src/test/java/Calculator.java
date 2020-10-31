@@ -1,4 +1,5 @@
-package org.jschool.cachablefibonachi;
+import org.jschool.cachableList.cacheproxy.Cachable;
+import org.jschool.cachableList.datasources.H2DB;
 
 import java.util.List;
 
