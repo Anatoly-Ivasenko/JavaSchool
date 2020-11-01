@@ -36,7 +36,7 @@ public class CacheProxy {
 
             int arg = (int) args[0];
 
-            if (listCacheDao.getLastArgInCache() > arg) {
+            if (listCacheDao.getLastArgInCache() >= arg) {
                 return listCacheDao.getListFromCache(arg);
             } else {
                 List<Integer> result = (List<Integer>) method.invoke(cachedObject,args);

@@ -1,6 +1,7 @@
 package org.jschool.cachableList.dao;
 
 import org.jschool.cachableList.datasources.Source;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,6 +16,7 @@ public class ListCacheDaoFactory {
             Source source = dataSourceType.newInstance();
             ListCacheDao dao = new ListCacheDaoImpl(source, tableName);
             cacheDaoMap.put(daoUid, dao);
+            dao.createTable(tableName);
             return dao;
         }
     }

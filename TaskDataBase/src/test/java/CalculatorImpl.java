@@ -8,6 +8,7 @@ public class CalculatorImpl implements Calculator {
     public List<Integer> fibonachi(int n) {
         try {
             Thread.sleep(500);
+            System.out.println("compute");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
