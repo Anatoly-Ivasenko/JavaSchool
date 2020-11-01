@@ -1,6 +1,7 @@
 package org.jschool.cachableList.cacheproxy;
 
 import org.jschool.cachableList.dao.ListCacheDao;
+import org.jschool.cachableList.dao.ListCacheDaoFactory;
 import org.jschool.cachableList.dao.ListCacheDaoImpl;
 import org.jschool.cachableList.datasources.Source;
 
@@ -31,8 +32,7 @@ public class CacheProxy {
                 return method.invoke(cachedObject,args);
             }
 
-            Source source = method.getAnnotation(Cachable.class).value().newInstance();
-            ListCacheDao listCacheDao = new ListCacheDaoImpl(source, method.getName());
+            ListCacheDao listCacheDao = ListCacheDaoFactory.getListCacheDao(method.getAnnotation(Cachable.class).value(), method.getName());
 
             int arg = (int) args[0];
 

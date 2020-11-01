@@ -7,10 +7,12 @@ import java.sql.*;
 
 public class RunTest {
 
-    private static final String CREATE_TABLE = "set schema public;\n create table fibonachi (\n" +
-            "    id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,\n" +
-            "    value INT NOT NULL\n" +
-            ");";
+//    private static final String CREATE_TABLE = "set schema public;\n create table fibonachi (\n" +
+//            "    id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,\n" +
+//            "    value INT NOT NULL\n" +
+//            ");";
+
+    private static final String CREATE_TABLE = "drop table fibonachi;";
 
     public static void main(String[] args) throws SQLException {
 
