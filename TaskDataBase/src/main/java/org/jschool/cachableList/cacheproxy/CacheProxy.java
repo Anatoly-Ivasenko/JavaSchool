@@ -39,6 +39,7 @@ public class CacheProxy {
             if (listCacheDao.getLastArgInCache() >= arg) {
                 return listCacheDao.getListFromCache(arg);
             } else {
+                System.out.println("compute");
                 List<Integer> result = (List<Integer>) method.invoke(cachedObject,args);
                 listCacheDao.addToCache(result);
                 return result;

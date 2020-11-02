@@ -9,6 +9,4 @@ public interface ListCacheDao {
     List<Integer> getListFromCache(int arg);
 
     int getLastArgInCache();
-
-    void createTable(String tableName);
 }

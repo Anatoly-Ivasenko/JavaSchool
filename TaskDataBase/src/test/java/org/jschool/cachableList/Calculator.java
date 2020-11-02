@@ -1,3 +1,5 @@
+package org.jschool.cachableList;
+
 import org.jschool.cachableList.cacheproxy.Cachable;
 import org.jschool.cachableList.datasources.H2DB;
 
