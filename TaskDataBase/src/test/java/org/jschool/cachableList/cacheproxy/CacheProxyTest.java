@@ -1,11 +1,13 @@
-import org.jschool.cachableList.cacheproxy.CacheProxy;
+package org.jschool.cachableList.cacheproxy;
 
-import java.sql.*;
+import org.jschool.cachableList.Calculator;
+import org.jschool.cachableList.CalculatorImpl;
+import org.junit.Test;
 
-public class RunTest {
+public class CacheProxyTest {
 
-    public static void main(String[] args) throws SQLException {
-
+    @Test
+    public void runTestCacheProxy() {
         Calculator calculator = new CacheProxy().cache(new CalculatorImpl());
         System.out.println("3:");
         calculator.fibonachi(3).forEach(System.out::println);
@@ -17,6 +19,6 @@ public class RunTest {
         calculator.fibonachi(4).forEach(System.out::println);
         System.out.println();
         System.out.println("25:");
-        calculator.fibonachi(25).forEach(System.out::println);
+        calculator.fibonachi(27).forEach(System.out::println);
     }
 }
