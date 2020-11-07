@@ -13,8 +13,5 @@ import javax.sql.DataSource;
 @Import(DataConfiguration.class)
 public class JdbcTemplateConfig {
 
-    @Bean
-    public RecipeDao recipeDao(DataSource dataSource, LobHandler lobHandler, JdbcTemplate jdbcTemplate) {
-        return new RecipeDaoImpl(dataSource, lobHandler, jdbcTemplate);
-    }
+
 }

@@ -10,7 +10,7 @@ public class Recipe {
     private String title;
     private String description;
     private Map<Product,Double> ingredients = new HashMap<>();
-    private Set<byte[]> photos;
+//    private Set<byte[]> photos;  //TODO Реализовать
 
     public int getId() {
         return id;
