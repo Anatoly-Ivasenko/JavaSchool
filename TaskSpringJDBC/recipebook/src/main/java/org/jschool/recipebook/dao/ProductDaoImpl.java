@@ -1,10 +1,10 @@
 package org.jschool.recipebook.dao;
 
 import org.jschool.recipebook.model.Product;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcCall;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.object.MappingSqlQuery;
 
@@ -12,39 +12,45 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 public class ProductDaoImpl implements ProductDao {
 
-    private DataSource dataSource;
-    private JdbcTemplate jdbcTemplate;
+    private final DataSource dataSource;
     private final SimpleJdbcInsert insertProduct;
-    private final SimpleJdbcCall jdbcCall;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final RowMapper<Product> productRowMapper;
 
-    public ProductDaoImpl(DataSource dataSource) {
+    public ProductDaoImpl(DataSource dataSource, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.dataSource = dataSource;
         this.insertProduct = new SimpleJdbcInsert(dataSource)
                 .withTableName("product")
                 .usingGeneratedKeyColumns("id");
-        this.jdbcCall = new SimpleJdbcCall(dataSource)
-                .withProcedureName("getProduct");
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        this.productRowMapper = (resultSet, i) -> {
+            Product product = new Product();
+            product.setId(resultSet.getInt(1));
+            product.setName(resultSet.getString(2));
+            product.setMeasure(resultSet.getString(3));
+            return product;
+        };
     }
 
     @Override
     public void createProduct(Product product) {
         Number returnId = insertProduct.executeAndReturnKey(new BeanPropertySqlParameterSource(product));
         product.setId((int)returnId);
+
     }
 
     @Override
     public Product findProductByName(String productName) {
-        Product product = new Product();
-        Map<String, Object> resultCall =
-                jdbcCall.execute(new MapSqlParameterSource().addValue("name", productName));
-        product.setId((int) resultCall.get("id"));
-        product.setName((String) resultCall.get("name"));
-        product.setMeasure((String) resultCall.get("measure"));
-        return product;
+        List<Product> products = namedParameterJdbcTemplate
+            .query("select * from PRODUCT where name=:name",
+                    new MapSqlParameterSource("name", productName), productRowMapper);
+        if (products.isEmpty()) {
+            System.out.println("No product "+ productName);
+        }
+        return products.get(0);
     }
 
     @Override
@@ -64,12 +70,12 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public Product getProductById(int productId) {
-        Product product = new Product();
-        Map<String, Object> resultCall =
-                jdbcCall.execute(new MapSqlParameterSource().addValue("id", productId));
-        product.setId((int) resultCall.get("id"));
-        product.setName((String) resultCall.get("name"));
-        product.setMeasure((String) resultCall.get("measure"));
-        return product;
+        List<Product> products = namedParameterJdbcTemplate
+                .query("select * from PRODUCT where id=:id",
+                        new MapSqlParameterSource("id", productId), productRowMapper);
+        if (products.isEmpty()) {
+            System.out.println("No product with id = "+ productId);
+        }
+        return products.get(0);
     }
 }
