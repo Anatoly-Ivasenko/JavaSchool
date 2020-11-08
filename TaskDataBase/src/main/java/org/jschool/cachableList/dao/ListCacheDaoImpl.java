@@ -72,7 +72,7 @@ public class ListCacheDaoImpl implements ListCacheDao {
         return result;
     }
 
-    public void createTable(String tableName) {
+    public void createTable() {
         try (Statement statement = source.connection().createStatement()) {
             statement.execute(CREATE_TABLE_START + tableName + CREATE_TABLE_END);
         } catch (SQLException e) {

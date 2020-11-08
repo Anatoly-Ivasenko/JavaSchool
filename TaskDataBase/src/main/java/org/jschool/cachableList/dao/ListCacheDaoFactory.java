@@ -16,7 +16,7 @@ public class ListCacheDaoFactory {
             Source source = dataSourceType.newInstance();
             ListCacheDaoImpl dao = new ListCacheDaoImpl(source, tableName);
             cacheDaoMap.put(daoUid, dao);
-            dao.createTable(tableName);
+            dao.createTable();
             return dao;
         }
     }

@@ -12,13 +12,10 @@ public class CacheProxyTest {
         System.out.println("3:");
         calculator.fibonachi(3).forEach(System.out::println);
         System.out.println();
+        System.out.println("11:");
+        calculator.fibonachi(11).forEach(System.out::println);
+        System.out.println();
         System.out.println("7:");
         calculator.fibonachi(7).forEach(System.out::println);
-        System.out.println();
-        System.out.println("4:");
-        calculator.fibonachi(4).forEach(System.out::println);
-        System.out.println();
-        System.out.println("25:");
-        calculator.fibonachi(27).forEach(System.out::println);
     }
 }

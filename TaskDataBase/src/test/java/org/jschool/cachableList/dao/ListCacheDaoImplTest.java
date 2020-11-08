@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 public class ListCacheDaoImplTest {
     private final Calculator calc = new CacheProxy().cache(new CalculatorImpl());
     private final static String
-            CREATE_TABLE = "create table if not exists fibonachi (\n id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,\n value INT NOT NULL\n)";
+            CREATE_TABLE = "create table if not exists fibonachi (id INT PRIMARY KEY AUTO_INCREMENT NOT NULL, value INT NOT NULL)";
     private final static String
             DROP_TABLE = "drop table if exists fibonachi";
 
@@ -34,7 +34,6 @@ public class ListCacheDaoImplTest {
     @Test
     public void addToCacheTest() throws SQLException {
         System.out.println("Add to Cache test");
-        Calculator calc = new CacheProxy().cache(new CalculatorImpl());
         List<Integer> result = calc.fibonachi(11);
         System.out.println("11:");
         result.forEach(System.out::println);
@@ -58,7 +57,6 @@ public class ListCacheDaoImplTest {
             list.add(i);
         }
         preparedStatement.executeBatch();
-        Calculator calc = new CacheProxy().cache(new CalculatorImpl());
         calc.fibonachi(5).forEach(System.out::println);
         assertArrayEquals(calc.fibonachi(5).toArray(), list.toArray());
     }

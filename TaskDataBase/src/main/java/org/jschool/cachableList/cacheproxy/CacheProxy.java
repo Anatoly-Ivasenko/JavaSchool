@@ -2,8 +2,6 @@ package org.jschool.cachableList.cacheproxy;
 
 import org.jschool.cachableList.dao.ListCacheDao;
 import org.jschool.cachableList.dao.ListCacheDaoFactory;
-import org.jschool.cachableList.dao.ListCacheDaoImpl;
-import org.jschool.cachableList.datasources.Source;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
