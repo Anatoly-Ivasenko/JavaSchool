@@ -1,5 +1,7 @@
 package org.jschool.recipebookonemore.model;
 
+import org.springframework.lang.NonNull;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -11,6 +13,9 @@ public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(unique = true)
+    @NonNull
     private String name;
     private String measure;
 

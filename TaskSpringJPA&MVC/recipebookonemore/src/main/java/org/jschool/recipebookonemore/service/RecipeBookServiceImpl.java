@@ -43,7 +43,12 @@ public class RecipeBookServiceImpl implements  RecipeBookService{
     @Override
     @Transactional
     public Product saveProduct(Product product) {
-        return productRepository.save(product);
+        Product oldProduct = productRepository.findByName(product.getName());
+        if (oldProduct == null) {
+            return productRepository.save(product);
+        } else {
+            return oldProduct;
+        }
     }
 
     @Override
